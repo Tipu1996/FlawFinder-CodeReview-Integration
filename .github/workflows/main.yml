@@ -17,14 +17,11 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          echo "$GITLAB_TOKEN" | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
-          FLAWFINDER_REPORT=$(docker run \
+          echo "$GITLAB_TOKEN" | docker login registry.gitlab.com --username tipu.solehria --password-stdin
+          docker run \
             --rm \
             --volume "$PWD":/tmp/app \
             --env CI_PROJECT_DIR=/tmp/app \
             --env SECURE_LOG_LEVEL=debug \
             -w /tmp/app \
-            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run)
-
-      - name: Display Flawfinder Report
-        run: echo "$FLAWFINDER_REPORT"
+            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run
