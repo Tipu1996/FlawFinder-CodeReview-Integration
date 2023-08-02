@@ -13,18 +13,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run Flawfinder and Save Output
+      - name: Run Flawfinder and Capture Output
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
           echo "$GITLAB_TOKEN" | docker login registry.gitlab.com --username tipu.solehria --password-stdin
-          docker run \
+          FLAWFINDER_REPORT=$(docker run \
             --rm \
             --volume "$PWD":/tmp/app \
             --env CI_PROJECT_DIR=/tmp/app \
             --env SECURE_LOG_LEVEL=debug \
             -w /tmp/app \
-            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run > /tmp/flawfinder_output.txt
+            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run)
+          echo "$FLAWFINDER_REPORT" > /tmp/flawfinder_output.txt
+
+      - name: Display Flawfinder Report
+        run: cat /tmp/flawfinder_output.txt
 
       - name: Upload Flawfinder Report
         uses: actions/upload-artifact@v2
