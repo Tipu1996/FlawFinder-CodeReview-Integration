@@ -24,4 +24,4 @@ jobs:
             --env CI_PROJECT_DIR=/tmp/app \
             --env SECURE_LOG_LEVEL=debug \
             -w /tmp/app \
-            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run > .github/workflows/report.txt
+            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run 
