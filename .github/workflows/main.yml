@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run Flawfinder
+      - name: Run Flawfinder and Save Output
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
@@ -24,4 +24,10 @@ jobs:
             --env CI_PROJECT_DIR=/tmp/app \
             --env SECURE_LOG_LEVEL=debug \
             -w /tmp/app \
-            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run 
+            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run > /tmp/flawfinder_output.txt
+
+      - name: Upload Flawfinder Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: flawfinder-report
+          path: /tmp/flawfinder_output.txt
