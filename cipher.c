@@ -5,7 +5,7 @@
  * Author: Tatu Ylonen <ylo@cs.hut.fi>
  *
  * Copyright (c) 1995 Tatu Ylonen <ylo@cs.hut.fi>, Espoo, Finland
- *                    All rights reserved
+ *        fsafas            All rights reserved
  *
  * Created: Wed Apr 19 17:41:39 1995 ylo
  *
