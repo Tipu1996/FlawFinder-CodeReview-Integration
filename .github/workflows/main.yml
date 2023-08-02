@@ -26,6 +26,9 @@ jobs:
             -w /tmp/app \
             registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run > report.txt 2>&1
 
+          # Remove color escape codes
+          sed -i 's/\x1b\[[0-9;]*m//g' report.txt
+
       - name: Display Flawfinder Report
         run: cat report.txt
 
