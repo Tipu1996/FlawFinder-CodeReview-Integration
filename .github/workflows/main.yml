@@ -1,21 +1,28 @@
-- name: Run Flawfinder
-  env:
-    DOCKER_AUTH_CONFIG: >-
-      {
-        "auths": {
-          "registry.gitlab.com": {
-            "username": "username",  # Your GitLab username
-            "password": "${{ secrets.GITLAB_TOKEN }}"  # Using the GitHub secret
-          }
-        }
-      }
-  run: |
-    echo $DOCKER_AUTH_CONFIG > /tmp/auth.json
-    docker login -u _json_key -p "$(cat /tmp/auth.json)" registry.gitlab.com
-    docker run \
-      --rm \
-      --volume "$PWD":/tmp/app \
-      --env CI_PROJECT_DIR=/tmp/app \
-      --env SECURE_LOG_LEVEL=debug \
-      -w /tmp/app \
-      registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run
+name: Flawfinder Code Analysis
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  flawfinder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run Flawfinder
+        run: |
+          docker login -u gitlab-ci-token -p ${{ secrets.GITLAB_TOKEN }} registry.gitlab.com
+          FLAWFINDER_REPORT=$(docker run \
+            --rm \
+            --volume "$PWD":/tmp/app \
+            --env CI_PROJECT_DIR=/tmp/app \
+            --env SECURE_LOG_LEVEL=debug \
+            -w /tmp/app \
+            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run)
+
+      - name: Display Flawfinder Report
+        run: echo "$FLAWFINDER_REPORT"
