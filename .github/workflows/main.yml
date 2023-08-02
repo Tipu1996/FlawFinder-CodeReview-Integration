@@ -24,7 +24,7 @@ jobs:
             --env CI_PROJECT_DIR=/tmp/app \
             --env SECURE_LOG_LEVEL=debug \
             -w /tmp/app \
-            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run > report.txt
+            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run > report.txt 2>&1
 
       - name: Display Flawfinder Report
         run: cat report.txt
