@@ -1,4 +1,4 @@
-name: Flawfinder Code Analysis
+name: Flawfinder Code Analyzer
 
 on:
   push:
