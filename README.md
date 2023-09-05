@@ -10,3 +10,4 @@ This repository contains the implementation of an automated security analysis pr
 - **Automated Process**: Integration with GitLab and Github Actions automates code security analysis, making it an integral part of your development workflow.
 - **Transparency and Accessibility**: Results of code analysis are transparently displayed within Github Actions, facilitating early issue resolution.
 - **Reproducibility**: Docker containers ensure consistent and reproducible code analysis across different environments.
+ 
