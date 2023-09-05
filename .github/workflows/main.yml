@@ -1,4 +1,4 @@
-name: Flawfinder Code Analysis
+name: Flawfinder Code Analyzer
 
 on:
   push:
@@ -13,25 +13,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run Flawfinder and Capture Output
+      - name: Run Flawfinder and capture output
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
           echo "$GITLAB_TOKEN" | docker login registry.gitlab.com --username tipu.solehria --password-stdin
-          FLAWFINDER_REPORT=$(docker run \
+          docker run \
             --rm \
             --volume "$PWD":/tmp/app \
             --env CI_PROJECT_DIR=/tmp/app \
             --env SECURE_LOG_LEVEL=debug \
             -w /tmp/app \
-            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run)
-          echo "$FLAWFINDER_REPORT" > /tmp/flawfinder_output.txt
+            registry.gitlab.com/gitlab-org/security-products/analyzers/flawfinder:latest /analyzer run > report.txt 2>&1
+
+          # Remove color escape codes
+          sed -i 's/\x1b\[[0-9;]*m//g' report.txt
 
       - name: Display Flawfinder Report
-        run: cat /tmp/flawfinder_output.txt
+        run: cat report.txt
 
-      - name: Upload Flawfinder Report
+      - name: Upload report
         uses: actions/upload-artifact@v2
         with:
           name: flawfinder-report
-          path: /tmp/flawfinder_output.txt
+          path: report.txt
