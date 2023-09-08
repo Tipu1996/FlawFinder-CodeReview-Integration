@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Snyk CLI
-        uses: snyk/actions/snyk-cli@master
+        uses: actions/setup-snyk@v2
         with:
           token: ${{ secrets.SNYK_TOKEN }}
 
