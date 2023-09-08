@@ -1,5 +1,4 @@
 name: Snyk Scan
-
 on:
   push:
     branches:
@@ -10,10 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Snyk CLI
-        uses: actions/setup-snyk@v1
-      - name: Run Snyk scan
-        uses: snyk/actions/snyk-scan@v1
+        uses: snyk/actions/snyk-cli@v2
         with:
           token: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk scan
+        uses: snyk/actions/snyk-scan@v2
+        with:
           severity: high
           output-file: snyk-report.txt
