@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install Snyk CLI
-        uses: snyk/actions/snyk-cli@v2
+        uses: snyk/actions/snyk-cli@master
         with:
           token: ${{ secrets.SNYK_TOKEN }}
 
       - name: Run Snyk scan
-        uses: snyk/actions/snyk-scan@v2
+        uses: snyk/actions/snyk-scan@master
         with:
           severity: high
           output-file: snyk-report.txt
